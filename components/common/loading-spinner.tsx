@@ -9,7 +9,7 @@ export function LoadingSpinner({
   return (
     <div className="flex h-full w-full items-center justify-center">
       <Loader2Icon
-        className={cn("size-16 animate-spin", className)}
+        className={cn("size-16 animate-spin text-muted-foreground", className)}
         {...props}
       />
     </div>

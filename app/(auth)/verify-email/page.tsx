@@ -1,11 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { BetterAuthActionButton } from "@/features/auth/components/better-auth-action-button";
 import { useSearchParams } from "next/navigation";
+import { LoadingSpinner } from "@/components/common/loading-spinner";
 
 export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />} >
+      <SuspendedPage />
+    </Suspense>
+  )
+}
+
+function SuspendedPage() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 

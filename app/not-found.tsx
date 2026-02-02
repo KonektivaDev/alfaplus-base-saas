@@ -5,29 +5,29 @@ import { SearchIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function NotFound() {
-    return (
-        <Empty>
-            <EmptyHeader>
-                <EmptyTitle>404 - Not Found</EmptyTitle>
-                <EmptyDescription>
-                    The page you&apos;re looking for doesn&apos;t exist. Try searching for
-                    what you need below.
-                </EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-                <InputGroup className="sm:w-3/4">
-                    <InputGroupInput placeholder="Try searching for pages..." />
-                    <InputGroupAddon>
-                        <SearchIcon />
-                    </InputGroupAddon>
-                    <InputGroupAddon align="inline-end">
-                        <Kbd>/</Kbd>
-                    </InputGroupAddon>
-                </InputGroup>
-                <EmptyDescription>
-                    Need help? <Link href="/support">Contact support</Link>
-                </EmptyDescription>
-            </EmptyContent>
-        </Empty>)
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyTitle>404 - Not Found</EmptyTitle>
+        <EmptyDescription>
+          The page you&apos;re looking for doesn&apos;t exist. Try searching for
+          what you need below.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <InputGroup className="sm:w-3/4">
+          <InputGroupInput placeholder="Try searching for pages..." />
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            <Kbd>/</Kbd>
+          </InputGroupAddon>
+        </InputGroup>
+        <EmptyDescription>
+          Need help? <Link href="/support">Contact support</Link>
+        </EmptyDescription>
+      </EmptyContent>
+    </Empty>)
 
 }
