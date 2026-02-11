@@ -32,7 +32,6 @@ export function OnboardingOrganizationList({
       },
       {
         onSuccess: async () => {
-          router.push("/dashboard");
           await setActiveOrganization(organizationId);
           router.push("/dashboard");
         },

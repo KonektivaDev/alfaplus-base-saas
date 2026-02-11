@@ -23,7 +23,7 @@ export function CreateOrganizationForm({
   ...props
 }: React.ComponentProps<"form"> & {
   onOpenChange: (open: boolean) => void;
-  afterCreate: (organizationId: string) => void;
+  afterCreate: (organizationId: string) => Promise<void>;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,10 +43,16 @@ export function CreateOrganizationForm({
       toast.error("Error creating organization", {
         description: res.error.message || "Failed to create organization",
       });
-    } else {
+      return;
+    }
+    try {
+      await afterCreate(res.data.id);
       form.reset();
       onOpenChange(false);
-      afterCreate(res.data.id);
+    } catch {
+      toast.error("Error setting active organization", {
+        description: "Failed to finish organization setup",
+      });
     }
   }
 

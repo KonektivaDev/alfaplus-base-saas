@@ -13,8 +13,8 @@ export function OnboardingFooter({ email }: { email: string }) {
       <Button
         variant="outline"
         size="icon"
-        onClick={() => {
-          authClient.signOut();
+        onClick={async () => {
+          await authClient.signOut();
           router.push("/login");
         }}
       >

@@ -60,7 +60,7 @@ export function ChangePasswordForm({
           toast.success("Password changed successfully");
           form.reset();
         },
-      }
+      },
     );
   }
 
@@ -68,7 +68,7 @@ export function ChangePasswordForm({
     <form
       className={cn("flex flex-col gap-6", className)}
       {...props}
-      id="profile-update-form"
+      id="change-password-form"
       onSubmit={form.handleSubmit(handleChangePassword)}
     >
       <FieldGroup>
@@ -100,7 +100,11 @@ export function ChangePasswordForm({
           description="Logout other sessions to prevent unauthorized access to your account. This will log you out of all other devices."
         />
 
-        <Button type="submit" className="w-fit" disabled={form.formState.isSubmitting || !form.formState.isDirty}>
+        <Button
+          type="submit"
+          className="w-fit"
+          disabled={form.formState.isSubmitting || !form.formState.isDirty}
+        >
           <LoadingSwap isLoading={form.formState.isSubmitting}>
             Change Password
           </LoadingSwap>

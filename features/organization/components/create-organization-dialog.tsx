@@ -14,31 +14,17 @@ import { CreateOrganizationForm } from "../forms/create-organization-form";
 import { authClient } from "@/lib/auth-client";
 import { setActiveOrganization } from "../actions/set-active-organization";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 export function CreateOrganizationDialog() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
   async function afterCreate(organizationId: string) {
-    setOpen(false);
-    await authClient.organization.setActive(
-      {
-        organizationId,
-      },
-      {
-        onError: (error) => {
-          toast.error("Error setting active organization", {
-            description:
-              error.error.message || "Failed to set active organization",
-          });
-        },
-        onSuccess: () => {
-          setActiveOrganization(organizationId);
-          router.push("/dashboard");
-        },
-      },
-    );
+    await authClient.organization.setActive({
+      organizationId,
+    });
+    await setActiveOrganization(organizationId);
+    router.push("/dashboard");
   }
 
   return (
