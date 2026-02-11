@@ -8,6 +8,11 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "User Settings - Account",
+  description: "Manage your user account settings",
+}
+
 export default function UserAccountPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>

@@ -1,15 +1,21 @@
-import { getGlobalTag, getIdTag } from "@/lib/data-cache";
-import { revalidateTag } from "next/cache";
+import { Prisma } from "@/generated/prisma/client";
+import { db } from "@/lib/prisma";
+import { revalidateUsersCache } from "./users-cache";
 
-export function getUsersGlobalTag() {
-  return getGlobalTag("user");
-}
+export async function saveUser(
+  id: string,
+  data: Prisma.UserUncheckedUpdateInput,
+) {
+  const user = await db.$transaction(async (tx) => {
+    const after = await tx.user.update({
+      where: { id },
+      data,
+    });
 
-export function getUserIdTag(id: string) {
-  return getIdTag("user", id);
-}
+    return after;
+  });
 
-export function revalidateUsersCache(id: string) {
-  revalidateTag(getUsersGlobalTag(), { expire: 0 });
-  revalidateTag(getUserIdTag(id), { expire: 0 });
+  revalidateUsersCache(id);
+
+  return user;
 }

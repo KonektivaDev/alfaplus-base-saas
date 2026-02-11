@@ -20,7 +20,6 @@ async function NavUserSuspense() {
     <NavUserClient user={{
       ...user,
       image: user?.image ?? null,
-
     }} />
   )
 }

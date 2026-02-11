@@ -9,8 +9,8 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export const metadata = {
-  title: "User Settings",
-  description: "Manage your user settings",
+  title: "User Settings - Profile",
+  description: "Manage your user profile settings",
 }
 
 export default async function UserSettingsPage() {

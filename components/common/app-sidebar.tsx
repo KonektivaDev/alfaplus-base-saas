@@ -7,14 +7,14 @@ import {
   SidebarMenu,
 } from "../ui/sidebar";
 import { NavUser } from "./nav-user";
-
+import { NavOrgSwitcher } from "./nav-org-switcher";
 
 export function AppSidebar({ content }: { content?: ReactNode }) {
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeader className="mt-0.5 h-(--header-height)">
         <SidebarMenu>
-          {/* <SidebarOrganizationButton /> TODO: Add organization button */}
+          <NavOrgSwitcher />
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>{content}</SidebarContent>

@@ -1,15 +1,33 @@
 import { AppHeader } from "@/components/common/app-header";
 import { AppSidebar } from "@/components/common/app-sidebar";
+import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export default function AppLayout({ children,
-  breadcrumbs,
-  sidebar,
-}: {
-  children: React.ReactNode,
-  breadcrumbs: React.ReactNode,
-  sidebar: React.ReactNode,
-}) {
+type Props = {
+  children: React.ReactNode;
+  breadcrumbs: React.ReactNode;
+  sidebar: React.ReactNode;
+};
+
+export default async function AppLayout(props: Props) {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <AppLayoutGuard {...props} />
+    </Suspense>
+  );
+}
+
+async function AppLayoutGuard({ children, breadcrumbs, sidebar }: Props) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (session == null) redirect("/login");
+
+  const activeOrganizationId = session.user?.activeOrganizationId;
+  if (activeOrganizationId == null) redirect("/onboarding");
+
   return (
     <div className="[--header-height:calc(--spacing(12))]">
       <SidebarProvider>
@@ -26,5 +44,5 @@ export default function AppLayout({ children,
         </SidebarInset>
       </SidebarProvider>
     </div>
-  )
+  );
 }

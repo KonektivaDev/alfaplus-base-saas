@@ -10,5 +10,6 @@ export async function getCurrentUser({ allData = false } = {}) {
     userId,
     redirectToSignIn: userId == null ? () => redirect("/login") : undefined,
     user: (allData && session?.user) || undefined,
+    session: session || undefined,
   };
 }
