@@ -1,14 +1,35 @@
-"use client"
+"use client";
 
 import { useTableState } from "@/hooks/use-table-state";
 import {
-  ColumnDef, SortingState, ColumnFiltersState, type Table as TableType, Row, ExpandedState, useReactTable,
-  getCoreRowModel, getSortedRowModel, getPaginationRowModel, getFilteredRowModel, getFacetedUniqueValues, getExpandedRowModel, flexRender,
+  ColumnDef,
+  SortingState,
+  ColumnFiltersState,
+  type Table as TableType,
+  Row,
+  ExpandedState,
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getPaginationRowModel,
+  getFilteredRowModel,
+  getFacetedUniqueValues,
+  getExpandedRowModel,
+  flexRender,
   Header,
   Column,
-  Cell
+  Cell,
 } from "@tanstack/react-table";
-import { ComponentType, CSSProperties, Fragment, ReactNode, useEffect, useId, useMemo, useState } from "react";
+import {
+  ComponentType,
+  CSSProperties,
+  Fragment,
+  ReactNode,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 import {
   closestCenter,
   DndContext,
@@ -28,10 +49,24 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToHorizontalAxis } from "@dnd-kit/modifiers";
 import { cn } from "@/lib/utils";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Button } from "../ui/button";
-import { ArrowDownUpIcon, ChevronDownIcon, ChevronUpIcon, GripVerticalIcon, PinIcon, PinOffIcon } from "lucide-react";
+import {
+  ArrowDownUpIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  GripVerticalIcon,
+  PinIcon,
+  PinOffIcon,
+} from "lucide-react";
 import { DataTablePagination } from "./data-table-pagination";
 
 interface DataTableProps<TData, TValue> {
@@ -54,6 +89,7 @@ interface DataTableProps<TData, TValue> {
   ExpandedContentComponent?: ComponentType<{
     row: Row<TData>;
   }>;
+  onRowClick?: (row: Row<TData>) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -71,14 +107,15 @@ export function DataTable<TData, TValue>({
   showPagination = true,
   getRowCanExpand,
   ExpandedContentComponent,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const columnIds = useMemo(
     () => columns.map((column) => column.id as string),
-    [columns]
+    [columns],
   );
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    initialFilters || []
+    initialFilters || [],
   );
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -94,7 +131,7 @@ export function DataTable<TData, TValue>({
       columnSizing: {},
       columnPinning: { left: [], right: [] },
     }),
-    [pageSize, initialSorting, columnIds]
+    [pageSize, initialSorting, columnIds],
   );
 
   const {
@@ -219,7 +256,7 @@ export function DataTable<TData, TValue>({
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
+    useSensor(KeyboardSensor, {}),
   );
 
   // Show nothing while localStorage is being read
@@ -238,7 +275,7 @@ export function DataTable<TData, TValue>({
       <div
         className={cn(
           "flex flex-col space-y-4 [&>div]:max-h-[calc(100vh-16rem)]",
-          className
+          className,
         )}
       >
         {ToolbarComponent && (
@@ -275,6 +312,7 @@ export function DataTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
+                      onClick={() => onRowClick?.(row)}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <SortableContext
@@ -307,13 +345,13 @@ export function DataTable<TData, TValue>({
             )}
           </div>
         ) : (
-          <div className="flex w-full items-center justify-center max-h-[calc(100vh-16rem)]">
+          <div className="flex max-h-[calc(100vh-16rem)] w-full items-center justify-center">
             {noResultsMessage}
           </div>
         )}
       </div>
     </DndContext>
-  )
+  );
 }
 
 const getPinningStyles = <TData,>(column: Column<TData>): CSSProperties => {
@@ -383,11 +421,10 @@ const DataTableHeader = <TData, TValue>({
       }
     >
       <div className="group flex items-center justify-start gap-0.5">
-
         <Button
           size="icon"
           variant="ghost"
-          className="-ml-2 size-7 shadow-none cursor-grab"
+          className="-ml-2 size-7 cursor-grab shadow-none"
           {...attributes}
           {...listeners}
           aria-label="Drag to change order"
@@ -401,8 +438,8 @@ const DataTableHeader = <TData, TValue>({
 
         <span
           className={cn(
-            "grow truncate uppercase text-xs font-medium",
-            header.column.columnDef.meta?.headerClassName
+            "grow truncate text-xs font-medium uppercase",
+            header.column.columnDef.meta?.headerClassName,
           )}
         >
           {header.isPlaceholder
@@ -443,58 +480,62 @@ const DataTableHeader = <TData, TValue>({
                 />
               ),
             }[header.column.getIsSorted() as string] ?? (
-                <ArrowDownUpIcon
-                  className="shrink-0 opacity-0 group-hover:opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-              )}
+              <ArrowDownUpIcon
+                className="shrink-0 opacity-0 group-hover:opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+            )}
           </Button>
         )}
 
         {header.column.getCanPin() &&
           (header.column.getIsPinned() ? (
             <Tooltip>
-              <TooltipTrigger render={
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="-mr-1 size-7 shadow-none"
-                  onClick={() => header.column.pin(false)}
-                  aria-label={`Unpin column ${header.column.columnDef.header as string
+              <TooltipTrigger
+                render={
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="-mr-1 size-7 shadow-none"
+                    onClick={() => header.column.pin(false)}
+                    aria-label={`Unpin column ${
+                      header.column.columnDef.header as string
                     }`}
-                >
-                  <PinOffIcon
-                    className="opacity-60"
-                    size={16}
-                    aria-hidden="true"
-                  />
-                </Button>
-              }>
-              </TooltipTrigger>
+                  >
+                    <PinOffIcon
+                      className="opacity-60"
+                      size={16}
+                      aria-hidden="true"
+                    />
+                  </Button>
+                }
+              ></TooltipTrigger>
               <TooltipContent>
                 Unpin column {header.column.columnDef.header as string}
               </TooltipContent>
             </Tooltip>
           ) : (
             <Tooltip>
-              <TooltipTrigger render={
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="-mr-1 size-7 shadow-none"
-                  onClick={() => header.column.pin("left")}
-                  aria-label={`Pin column ${header.column.columnDef.header as string
+              <TooltipTrigger
+                render={
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="-mr-1 size-7 shadow-none"
+                    onClick={() => header.column.pin("left")}
+                    aria-label={`Pin column ${
+                      header.column.columnDef.header as string
                     } `}
-                >
-                  <PinIcon
-                    className="opacity-60"
-                    size={16}
-                    aria-hidden="true"
-                  />
-                </Button>
-              }>
-              </TooltipTrigger>
+                  >
+                    <PinIcon
+                      className="opacity-60"
+                      size={16}
+                      aria-hidden="true"
+                    />
+                  </Button>
+                }
+              ></TooltipTrigger>
               <TooltipContent>
                 Pin column {header.column.columnDef.header as string} to left
               </TooltipContent>
@@ -549,7 +590,7 @@ const DataTableCell = <TData, TValue>({
       ref={setNodeRef}
       className={cn(
         "[&[data-pinned][data-last-col]]:border-border data-pinned:bg-background/90 truncate data-pinned:backdrop-blur-xs [&[data-pinned=left][data-last-col=left]]:border-r [&[data-pinned=right][data-last-col=right]]:border-l",
-        cellClassName
+        cellClassName,
       )}
       style={style}
       data-pinned={isPinned || undefined}

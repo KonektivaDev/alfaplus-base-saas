@@ -14,26 +14,31 @@ import { FormInput } from "@/components/common/form";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  email: z.email({ message: "Invalid email address" }),
+  slug: z.string().min(1, { message: "Slug is required" }),
 });
 
-export function ProfileUpdateForm({
-  user,
+export function OrganizationBasicDataUpdateForm({
+  organization,
   className,
   ...props
 }: React.ComponentProps<"form"> & {
-  user: { name: string; email: string };
+  organization: { name: string; slug: string };
 }) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: user,
+    defaultValues: organization,
   });
 
-  async function handleProfileUpdate(data: z.infer<typeof formSchema>) {
-    const res = await authClient.updateUser({
-      name: data.name,
+  async function handleOrganizationBasicDataUpdate(
+    data: z.infer<typeof formSchema>,
+  ) {
+    const res = await authClient.organization.update({
+      data: {
+        name: data.name,
+        slug: data.slug,
+      },
     });
 
     if (res.error) {
@@ -53,24 +58,23 @@ export function ProfileUpdateForm({
       className={cn("flex flex-col gap-6", className)}
       {...props}
       id="profile-update-form"
-      onSubmit={form.handleSubmit(handleProfileUpdate)}
+      onSubmit={form.handleSubmit(handleOrganizationBasicDataUpdate)}
     >
       <FieldGroup>
         <FormInput
           control={form.control}
           name="name"
-          label="Full Name"
-          placeholder="John Doe"
-          autoComplete="name"
+          label="Name"
+          autoComplete="organization-name"
+          disabled={form.formState.isSubmitting}
         />
 
         <FormInput
           control={form.control}
-          name="email"
-          label="Email"
-          disabled
-          placeholder="m@example.com"
-          autoComplete="email"
+          name="slug"
+          label="Slug"
+          autoComplete="organization-slug"
+          disabled={form.formState.isSubmitting}
         />
 
         <Button

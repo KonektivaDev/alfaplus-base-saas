@@ -1,6 +1,6 @@
 "use client";
 
-import { LoadingSpinner } from "@/components/common/loading-spinner";
+import { UserInfo } from "@/components/common/user-info";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import {
@@ -86,10 +86,11 @@ function getColumns(
       cell: ({ row }) => {
         return (
           <div>
-            <div className="font-medium">{row.original.name || "No name"}</div>
-            <div className="text-muted-foreground text-sm">
-              {row.original.email}
-            </div>
+            <UserInfo
+              name={row.original.name ?? ""}
+              email={row.original.email ?? ""}
+              image={row.original.image ?? ""}
+            />
             <div className="itmes-center flex gap-2 not-empty:mt-2">
               {row.original.banned && (
                 <Badge variant="destructive">Banned</Badge>
@@ -113,7 +114,7 @@ function getColumns(
           <Badge
             variant={row.original.role === "admin" ? "default" : "secondary"}
           >
-            {row.original.role}
+            <span className="text-xs">{row.original.role}</span>
           </Badge>
         );
       },
@@ -436,16 +437,6 @@ function Toolbar<T>({
         </div>
       )}
     </div>
-  );
-}
-
-export function SkeletonUsersListTable() {
-  return (
-    <UsersListTable
-      users={[]}
-      currentUserId={""}
-      noResultsMessage={<LoadingSpinner className="size-12" />}
-    />
   );
 }
 

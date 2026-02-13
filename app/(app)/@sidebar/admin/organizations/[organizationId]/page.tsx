@@ -1,5 +1,5 @@
 import { ModulesSidebar } from "@/components/common/modules-sidebar";
 
-export default function AdminUsersSidebar() {
+export default function AdminOrganizationSidebar() {
   return <ModulesSidebar />;
 }

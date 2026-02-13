@@ -7,12 +7,14 @@ import {
 
 export const statement = {
   ...defaultStatements,
+  organization: ["list", "create", "update", "delete"],
 } as const;
 
 const ac = createAccessControl(statement);
 
 export const roles = {
   admin: ac.newRole({
+    organization: ["list", "create", "update", "delete"],
     ...adminAc.statements,
   }),
   user: ac.newRole({

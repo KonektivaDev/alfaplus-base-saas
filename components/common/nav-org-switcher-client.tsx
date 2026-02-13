@@ -201,6 +201,7 @@ export function NavOrgSwitcherClient({ isOwner }: NavOrgSwitcherClientProps) {
               )}
               <DropdownMenuSeparator />
               <DialogTrigger
+                nativeButton={false}
                 render={
                   <DropdownMenuItem className="gap-2 p-2">
                     <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
