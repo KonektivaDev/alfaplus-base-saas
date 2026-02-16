@@ -7,7 +7,7 @@ export function UserInfo({
 }: {
   name: string;
   email: string;
-  image: string;
+  image: string | null;
 }) {
   const nameInitials = name
     .split(" ")

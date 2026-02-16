@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 export function PageAside({
   pages,
 }: {
-  pages: { title: string; href: string }[];
+  pages: { title: string; href: string; altActive?: string }[];
 }) {
   const pathname = usePathname();
 
@@ -18,7 +18,8 @@ export function PageAside({
           <li
             key={page.href}
             className={cn(
-              page.href === pathname
+              page.href === pathname ||
+                (page.altActive && page.altActive === pathname)
                 ? "bg-accent-foreground/5 text-accent-foreground hover:bg-accent-foreground/10 cursor-pointer rounded-md px-2 py-2 text-xs font-medium"
                 : "text-muted-foreground hover:bg-accent-foreground/10 cursor-pointer rounded-md px-2 py-2 text-xs font-medium",
             )}

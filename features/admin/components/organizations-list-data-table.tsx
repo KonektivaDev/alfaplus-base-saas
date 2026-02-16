@@ -9,6 +9,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
@@ -156,6 +157,9 @@ function getColumns({
               </DropdownMenu>
               <AlertDialogContent>
                 <AlertDialogHeader>
+                  <AlertDialogMedia>
+                    <TrashIcon className="text-destructive size-8" />
+                  </AlertDialogMedia>
                   <AlertDialogTitle>Delete Organization</AlertDialogTitle>
                   <AlertDialogDescription>
                     Are you sure you want to delete this organization? All data

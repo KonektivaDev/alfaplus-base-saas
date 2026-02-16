@@ -8,6 +8,7 @@ import { sendResetPasswordEmail } from "@/features/auth/lib/send-reset-password-
 import { revalidateUsersCache } from "@/features/user/db/users-cache";
 import { ac, roles } from "./permissions";
 import { getInitialOrganizationService } from "@/features/organization/services/organization-service";
+import { sendOrganizationInviteEmail } from "@/features/auth/lib/send-organization-invitation-email";
 
 export const auth = betterAuth({
   appName: "Alfa+",
@@ -99,6 +100,19 @@ export const auth = betterAuth({
     organization({
       teams: {
         enabled: true,
+      },
+      sendInvitationEmail: async ({
+        email,
+        organization,
+        invitation,
+        inviter,
+      }) => {
+        await sendOrganizationInviteEmail({
+          email,
+          organization,
+          invitation,
+          inviter: inviter.user,
+        });
       },
     }),
     nextCookies(),

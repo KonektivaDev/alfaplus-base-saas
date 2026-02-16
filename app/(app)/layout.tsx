@@ -25,7 +25,8 @@ async function AppLayoutGuard({ children, breadcrumbs, sidebar }: Props) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (session == null) redirect("/login");
 
-  const activeOrganizationId = session.user?.activeOrganizationId;
+  const activeOrganizationId =
+    session.session?.activeOrganizationId ?? session.user?.activeOrganizationId;
   if (activeOrganizationId == null) redirect("/onboarding");
 
   return (

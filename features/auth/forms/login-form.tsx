@@ -9,15 +9,24 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldSeparator } from "@/components/ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldSeparator,
+} from "@/components/ui/field";
 import { FormInput, FormPasswordInput } from "@/components/common/form";
 import { Button } from "@/components/ui/button";
 import { GoogleOAuthButton } from "../components/google-oauth-button";
+import { LoadingSwap } from "@/components/ui/loading-swap";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
-})
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" }),
+});
 
 export function LoginForm({
   className,
@@ -49,7 +58,7 @@ export function LoginForm({
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   async function handleLogin(values: z.infer<typeof formSchema>) {
@@ -62,7 +71,7 @@ export function LoginForm({
         onError: (error) => {
           if (error.error.code === "EMAIL_NOT_VERIFIED") {
             router.push(
-              `/verify-email?${createQueryString("email", values.email)}`
+              `/verify-email?${createQueryString("email", values.email)}`,
             );
           }
           toast.error("Failed to login!", {
@@ -73,7 +82,7 @@ export function LoginForm({
           toast.success("Logged in successfully");
           router.push(callbackURL);
         },
-      }
+      },
     );
   }
 
@@ -98,6 +107,7 @@ export function LoginForm({
           label="Email"
           placeholder="m@example.com"
           autoComplete="email"
+          disabled={form.formState.isSubmitting}
         />
 
         <FieldContent>
@@ -106,23 +116,31 @@ export function LoginForm({
             name="password"
             label="Password"
             autoComplete="current-password"
+            disabled={form.formState.isSubmitting}
           />
           <a
             href="/forgot-password"
-            className="ml-auto text-xs mt-2 underline-offset-4 hover:underline"
+            className="mt-2 ml-auto text-xs underline-offset-4 hover:underline"
           >
             Forgot your password?
           </a>
         </FieldContent>
 
         <Field>
-          <Button type="submit">Login</Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            <LoadingSwap isLoading={form.formState.isSubmitting}>
+              Login
+            </LoadingSwap>
+          </Button>
         </Field>
 
         <FieldSeparator>Or continue with</FieldSeparator>
 
         <Field>
-          <GoogleOAuthButton label="Login with Google" />
+          <GoogleOAuthButton
+            label="Login with Google"
+            disabled={form.formState.isSubmitting}
+          />
           <FieldDescription className="text-center">
             Don&apos;t have an account?{" "}
             <a href="/sign-up" className="underline underline-offset-4">
@@ -132,5 +150,5 @@ export function LoginForm({
         </Field>
       </FieldGroup>
     </form>
-  )
+  );
 }

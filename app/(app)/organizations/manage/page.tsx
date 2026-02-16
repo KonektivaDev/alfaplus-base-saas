@@ -1,4 +1,3 @@
-import { LoadingSpinner } from "@/components/common/loading-spinner";
 import {
   Section,
   SectionContent,
@@ -20,46 +19,20 @@ export const metadata = {
   description: "Manage organization basic information",
 };
 
-type Props = { params: Promise<{ organizationId: string }> };
-
-export default async function AdminOrganizationBasicInformationPage({
-  params,
-}: Props) {
-  const { organizationId } = await params;
+export default function OrganizationManagePage() {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <SuspendedPage organizationId={organizationId} />
+    <Suspense>
+      <SuspendedPage />
     </Suspense>
   );
 }
 
-async function SuspendedPage({ organizationId }: { organizationId: string }) {
-  const h = await headers();
-
-  const session = await auth.api.getSession({ headers: h });
-  if (session == null) {
-    redirect("/login");
-  }
-
-  const hasAccess = await auth.api.userHasPermission({
-    headers: h,
-    body: {
-      permission: {
-        organization: ["update"],
-      },
-    },
-  });
-
-  if (!hasAccess.success) redirect("/dashboard");
-
+async function SuspendedPage() {
   const organization = await auth.api.getFullOrganization({
-    headers: h,
-    params: {
-      organizationId: organizationId,
-    },
+    headers: await headers(),
   });
 
-  if (organization == null) return null;
+  if (organization == null) redirect("/onboarding");
 
   return (
     <SectionGroup>
@@ -94,7 +67,7 @@ async function SuspendedPage({ organizationId }: { organizationId: string }) {
           </SectionHeader>
         </Section>
         <SectionContent className="col-span-8 space-y-4 md:space-y-6 lg:col-span-4">
-          <OrganizationDeletion organizationId={organizationId} />
+          <OrganizationDeletion organizationId={organization.id} />
         </SectionContent>
       </section>
     </SectionGroup>

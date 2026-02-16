@@ -11,6 +11,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
@@ -52,6 +53,7 @@ import {
   TrashIcon,
   UserIcon,
   UserLockIcon,
+  UserRoundMinus,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -108,14 +110,20 @@ function getColumns(
     {
       id: "role",
       accessorKey: "role",
-      header: "Role",
+      header: "Roles",
       cell: ({ row }) => {
+        const roles = row.original.role?.split(",") ?? [];
         return (
-          <Badge
-            variant={row.original.role === "admin" ? "default" : "secondary"}
-          >
-            <span className="text-xs">{row.original.role}</span>
-          </Badge>
+          <div className="flex items-center gap-2">
+            {roles.map((role) => (
+              <Badge
+                key={role}
+                variant={role === "admin" ? "default" : "secondary"}
+              >
+                {role}
+              </Badge>
+            ))}
+          </div>
         );
       },
     },
@@ -208,10 +216,13 @@ function getColumns(
             </DropdownMenu>
             <AlertDialogContent>
               <AlertDialogHeader>
+                <AlertDialogMedia>
+                  <UserRoundMinus className="text-destructive size-8" />
+                </AlertDialogMedia>
                 <AlertDialogTitle>Delete User</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete this user? This action cannot
-                  be undone.
+                  Are you sure you want to delete user account permanently? This
+                  will delete all user data and cannot be recovered.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

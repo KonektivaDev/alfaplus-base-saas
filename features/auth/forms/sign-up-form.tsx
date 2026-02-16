@@ -1,7 +1,12 @@
 "use client";
 import { FormInput, FormPasswordInput } from "@/components/common/form";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldGroup, FieldSeparator } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldSeparator,
+} from "@/components/ui/field";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,7 +65,7 @@ export function SignupForm({
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   async function handleSignUp(values: z.infer<typeof formSchema>) {
@@ -75,7 +80,7 @@ export function SignupForm({
             description: error.error.message || "Failed to create account",
           });
         },
-      }
+      },
     );
 
     if (res.error == null && !res.data?.user?.emailVerified) {
@@ -107,6 +112,7 @@ export function SignupForm({
           label="Full Name"
           placeholder="John Doe"
           autoComplete="name"
+          disabled={form.formState.isSubmitting}
         />
 
         <FormInput
@@ -116,6 +122,7 @@ export function SignupForm({
           description="We'll use this to contact you. We will not share your email with anyone else."
           placeholder="m@example.com"
           autoComplete="email"
+          disabled={form.formState.isSubmitting}
         />
 
         <FormPasswordInput
@@ -123,6 +130,7 @@ export function SignupForm({
           name="password"
           label="Password"
           autoComplete="new-password"
+          disabled={form.formState.isSubmitting}
         />
 
         <FormPasswordInput
@@ -130,6 +138,7 @@ export function SignupForm({
           name="confirmPassword"
           label="Confirm Password"
           autoComplete="new-password"
+          disabled={form.formState.isSubmitting}
         />
 
         <Field>
@@ -143,7 +152,10 @@ export function SignupForm({
         <FieldSeparator>Or continue with</FieldSeparator>
 
         <Field>
-          <GoogleOAuthButton label="Sign up with Google" />
+          <GoogleOAuthButton
+            label="Sign up with Google"
+            disabled={form.formState.isSubmitting}
+          />
           <FieldDescription className="px-6 text-center">
             Already have an account?{" "}
             <Button
@@ -154,13 +166,13 @@ export function SignupForm({
               disabled={form.formState.isSubmitting}
               render={
                 form.formState.isSubmitting ? (
-                  <span className="underline text-muted-foreground opacity-50">
+                  <span className="text-muted-foreground underline opacity-50">
                     Sign in
                   </span>
                 ) : (
                   <Link href="/login">Sign in</Link>
-                )}
-
+                )
+              }
             />
           </FieldDescription>
         </Field>
