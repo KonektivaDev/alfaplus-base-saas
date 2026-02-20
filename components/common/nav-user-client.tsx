@@ -33,7 +33,10 @@ import { UserInfo } from "./user-info";
 export function NavUserClient({
   user,
 }: {
-  user: Omit<User, "role" | "banReason" | "banned" | "banExpires">;
+  user: Omit<
+    User,
+    "role" | "banReason" | "banned" | "banExpires" | "activeOrganizationId"
+  >;
 }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
